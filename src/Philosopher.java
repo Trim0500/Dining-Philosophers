@@ -1,4 +1,6 @@
 import common.BaseThread;
+import java.io.ObjectInputStream;
+import java.util.*;
 
 /**
  * Class Philosopher.
@@ -13,6 +15,8 @@ public class Philosopher extends BaseThread
 	 */
 	public static final long TIME_TO_WASTE = 1000;
 
+	private final int guessingNumber = 17;
+
 	/**
 	 * The act of eating.
 	 * - Print the fact that a given phil (their TID) has started eating.
@@ -25,9 +29,15 @@ public class Philosopher extends BaseThread
 	{
 		try
 		{
-			// ...
+			System.out.printf("[Philosopher/eat] -- Philosopher %d is now eating.\n", getTID());
+
+			Thread.yield();
+
 			sleep((long)(Math.random() * TIME_TO_WASTE));
-			// ...
+
+			Thread.yield();
+
+			System.out.printf("[Philosopher/eat] -- Philosopher %d is done eating.\n", getTID());
 		}
 		catch(InterruptedException e)
 		{
@@ -47,7 +57,22 @@ public class Philosopher extends BaseThread
 	 */
 	public void think()
 	{
-		// ...
+		try {
+			System.out.printf("[Philosopher/think] -- Philosopher %d is now thinking.\n", getTID());
+
+			Thread.yield();
+
+			sleep((long)(Math.random() * TIME_TO_WASTE));
+
+			Thread.yield();
+
+			System.out.printf("[Philosopher/think] -- Philosopher %d is done thinking.\n", getTID());
+		}
+		catch (InterruptedException exc) {
+			System.err.println("Philosopher.think():");
+			DiningPhilosophers.reportException(exc);
+			System.exit(1);
+		}
 	}
 
 	/**
@@ -60,11 +85,15 @@ public class Philosopher extends BaseThread
 	 */
 	public void talk()
 	{
-		// ...
+		System.out.printf("[Philosopher/talk] -- Philopher %d will now philosofy.\n", getTID());
+
+		Thread.yield();
 
 		saySomething();
 
-		// ...
+		Thread.yield();
+
+		System.out.printf("[Philosopher/talk] -- Philopher %d is finished speak.\n", getTID());
 	}
 
 	/**
@@ -87,11 +116,15 @@ public class Philosopher extends BaseThread
 			 * A decision is made at random whether this particular
 			 * philosopher is about to say something terribly useful.
 			 */
-			if(true == false)
+			// Pick a number from 17 to 42, if you guess correctly I will give you permission to talk this time
+			Random ranNum = new Random();
+			if (ranNum.nextInt(17, 42) == guessingNumber)
 			{
-				// Some monitor ops down here...
+				DiningPhilosophers.soMonitor.requestTalk();
+
 				talk();
-				// ...
+
+				DiningPhilosophers.soMonitor.endTalk();
 			}
 
 			Thread.yield();
@@ -110,14 +143,10 @@ public class Philosopher extends BaseThread
 			"You know, true is false and false is true if you think of it",
 			"2 + 2 = 5 for extremely large values of 2...",
 			"If thee cannot speak, thee must be silent",
-			"My number is " + getTID() + ""
+			"My number is " + getTID()
 		};
 
-		System.out.println
-		(
-			"Philosopher " + getTID() + " says: " +
-			astrPhrases[(int)(Math.random() * astrPhrases.length)]
-		);
+		System.out.printf("Philopher %d says: %s\n", getTID(), astrPhrases[(int)(Math.random() * astrPhrases.length)]);
 	}
 }
 
