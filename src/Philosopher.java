@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * Class Philosopher.
- * Outlines main subrutines of our virtual philosopher.
+ * Outlines main subroutines of our virtual philosopher.
  *
  * @author Serguei A. Mokhov, mokhov@cs.concordia.ca
  */
