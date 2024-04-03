@@ -20,6 +20,7 @@ public class Monitor
 
 	enum state { THINKING, HUNGRY, EATING, TALKING, REQUESTPHILOSPHY};
 	state[] states;
+	final Lock lock = new ReentrantLock();
 	ArrayList<Condition> conditions;
 	int size;
 
@@ -35,7 +36,6 @@ public class Monitor
 		for(int i = 0; i < this.states.length; i++) {
 			this.states[i] = state.THINKING;
 		}
-		Lock lock = new ReentrantLock();
 		this.conditions = new ArrayList<Condition>();
 		for(int i = 0; i < piNumberOfPhilosophers; i++) {
 			this.conditions.add(lock.newCondition());
@@ -55,16 +55,18 @@ public class Monitor
 	 */
 	public synchronized void pickUp(final int piTID)
 	{
-		this.states[piTID] = state.HUNGRY;
-		test(piTID);
-		if (states[piTID] != state.EATING)
-			try {
-				this.conditions.get(piTID).wait();
-			} catch (InterruptedException e) {
-				System.err.println("pickUp:");
-				DiningPhilosophers.reportException(e);
-				System.exit(1);
-			}
+		lock.lock();
+
+		try {
+			this.states[piTID] = state.HUNGRY;
+			test(piTID);
+			if (states[piTID] != state.EATING)
+				this.conditions.get(piTID).await();
+		}
+		catch (InterruptedException e) { }
+		finally {
+			lock.unlock();
+		}
 	}
 
 	/**
@@ -80,7 +82,10 @@ public class Monitor
 
 	public synchronized void test(final int piTID)
 	{
-		if(this.states[(piTID + this.size - 1) % this.size] != state.EATING && this.states[piTID] == state.HUNGRY && this.states[(piTID + 1) % this.size] != state.EATING) {
+		if(this.states[(piTID + this.size - 1) % this.size] != state.EATING &&
+			this.states[piTID] == state.HUNGRY &&
+			this.states[(piTID + 1) % this.size] != state.EATING)
+		{
 			this.states[piTID] = state.EATING;
 			this.conditions.get(piTID).signal();
 		}

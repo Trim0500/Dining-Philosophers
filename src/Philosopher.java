@@ -103,11 +103,11 @@ public class Philosopher extends BaseThread
 	{
 		for(int i = 0; i < DiningPhilosophers.DINING_STEPS; i++)
 		{
-			DiningPhilosophers.soMonitor.pickUp(getTID());
+			DiningPhilosophers.soMonitor.pickUp(getTID() - 1);
 
 			eat();
 
-			DiningPhilosophers.soMonitor.putDown(getTID());
+			DiningPhilosophers.soMonitor.putDown(getTID() - 1);
 
 			think();
 
@@ -117,7 +117,7 @@ public class Philosopher extends BaseThread
 			 * philosopher is about to say something terribly useful.
 			 */
 			// Pick a number from 17 to 42, if you guess correctly I will give you permission to talk this time
-			Random ranNum = new Random();
+			/*Random ranNum = new Random();
 			if (ranNum.nextInt(17, 42) == guessingNumber)
 			{
 				DiningPhilosophers.soMonitor.requestTalk();
@@ -125,7 +125,7 @@ public class Philosopher extends BaseThread
 				talk();
 
 				DiningPhilosophers.soMonitor.endTalk();
-			}
+			}*/
 
 			Thread.yield();
 		}
