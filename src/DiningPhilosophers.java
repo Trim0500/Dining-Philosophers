@@ -46,7 +46,19 @@ public class DiningPhilosophers
 			 * Should be settable from the command line
 			 * or the default if no arguments supplied.
 			 */
-			int iPhilosophers = DEFAULT_NUMBER_OF_PHILOSOPHERS;
+			int iPhilosophers = 0;
+			if (argv.length == 1) {
+				int parsedNumPhilosophers = Integer.parseInt(argv[0]);
+				if (parsedNumPhilosophers <= 4) {
+					throw new Exception("[DiningPhilosophers/main] -- Number of philosophers too low, try again.");
+				}
+				else {
+					iPhilosophers = parsedNumPhilosophers;
+				}
+			}
+			else {
+				iPhilosophers = DEFAULT_NUMBER_OF_PHILOSOPHERS;
+			}
 
 			// Make the monitor aware of how many philosophers there are
 			soMonitor = new Monitor(iPhilosophers);
@@ -80,7 +92,13 @@ public class DiningPhilosophers
 			reportException(e);
 			System.exit(1);
 		}
-	} // main()
+		catch (NumberFormatException exc) {
+			System.out.println("[DiningPhilosophers/main] -- " + exc.getMessage());
+		}
+		catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    } // main()
 
 	/**
 	 * Outputs exception information to STDERR
