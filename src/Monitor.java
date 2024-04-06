@@ -20,11 +20,9 @@ public class Monitor
 
 	enum state { THINKING, HUNGRY, EATING, TALKING, REQUESTPHILOSPHY};
 	static state[] states;
-	static final Lock lock = new ReentrantLock();
-	static ArrayList<Condition> conditions;
 	int size;
 
-
+	ReentrantLock lock = new ReentrantLock();
 
 	/**
 	 * Constructor
@@ -34,10 +32,6 @@ public class Monitor
 		size = piNumberOfPhilosophers;
 		states = new state[piNumberOfPhilosophers];
         Arrays.fill(states, state.THINKING);
-		conditions = new ArrayList<Condition>();
-		for(int i = 0; i < piNumberOfPhilosophers; i++) {
-			conditions.add(lock.newCondition());
-		}
 	}
 
 	/*
@@ -52,18 +46,16 @@ public class Monitor
 	 */
 	public synchronized void pickUp(final int piTID)
 	{
-		lock.lock();
-
-		try {
-			states[piTID] = state.HUNGRY;
-			test(piTID);
-			if (states[piTID] != state.EATING)
-				conditions.get(piTID).await();
-		}
-		catch (InterruptedException ignored) { }
-		finally {
-			lock.unlock();
-		}
+		states[piTID] = state.HUNGRY;
+		test(piTID);
+		if (states[piTID] != state.EATING)
+			synchronized (this) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
 	}
 
 	/**
@@ -84,7 +76,7 @@ public class Monitor
 			states[(piTID + 1) % this.size] != state.EATING)
 		{
 			states[piTID] = state.EATING;
-			conditions.get(piTID).signal();
+			notifyAll();
 		}
 	}
 
