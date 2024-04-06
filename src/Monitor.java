@@ -59,7 +59,7 @@ public class Monitor
 	}
 
 	/**
-	 * When a given philosopher's done eating, they put the chopstiks/forks down
+	 * When a given philosopher's done eating, they put the chopsticks/forks down
 	 * and let others know they are available.
 	 */
 	public synchronized void putDown(final int piTID)
@@ -84,18 +84,21 @@ public class Monitor
 	 * Only one philopher at a time is allowed to philosophy
 	 * (while she is not eating).
 	 */
-	public synchronized void requestTalk()
+	public synchronized void requestTalk(final int piTID)
 	{
-		// ...
+		states[piTID] = state.REQUESTPHILOSPHY;
+		lock.lock();
+		states[piTID] = state.TALKING;
 	}
 
 	/**
 	 * When one philosopher is done talking stuff, others
 	 * can feel free to start talking.
 	 */
-	public synchronized void endTalk()
+	public synchronized void endTalk(final int piTID)
 	{
-		// ...
+		states[piTID] = state.THINKING;
+		lock.unlock();
 	}
 }
 

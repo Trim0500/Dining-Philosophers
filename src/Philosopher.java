@@ -1,5 +1,7 @@
 import common.BaseThread;
 
+import java.util.Random;
+
 /**
  * Class Philosopher.
  * Outlines main subroutines of our virtual philosopher.
@@ -115,15 +117,15 @@ public class Philosopher extends BaseThread
 			 * philosopher is about to say something terribly useful.
 			 */
 			// Pick a number from 17 to 42, if you guess correctly I will give you permission to talk this time
-			/*Random ranNum = new Random();
-			if (ranNum.nextInt(17, 42) == guessingNumber)
+			Random ranNum = new Random();
+			if (ranNum.nextInt(17, 18) == guessingNumber)
 			{
-				DiningPhilosophers.soMonitor.requestTalk();
+				DiningPhilosophers.soMonitor.requestTalk(getTID() - 1);
 
 				talk();
 
-				DiningPhilosophers.soMonitor.endTalk();
-			}*/
+				DiningPhilosophers.soMonitor.endTalk(getTID() - 1);
+			}
 
 			Thread.yield();
 		}
@@ -141,7 +143,11 @@ public class Philosopher extends BaseThread
 			"You know, true is false and false is true if you think of it",
 			"2 + 2 = 5 for extremely large values of 2...",
 			"If thee cannot speak, thee must be silent",
-			"My number is " + getTID()
+			"My number is " + getTID(),
+			"The Zombies are Coming.......",
+			"Chewbacca once said: Uuuuuuuuuuuur Ahhhhhrrrrrr Uhrrr Ahhhhrrrrrr Aaaargh...",
+			"AHHHHH FORGIVE, FORGIVENESS!!!!!",
+			"How's the Wife!?"
 		};
 
 		System.out.printf("Philopher %d says: %s\n", getTID(), astrPhrases[(int)(Math.random() * astrPhrases.length)]);
