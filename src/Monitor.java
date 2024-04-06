@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -19,9 +19,9 @@ public class Monitor
 	 */
 
 	enum state { THINKING, HUNGRY, EATING, TALKING, REQUESTPHILOSPHY};
-	state[] states;
-	final Lock lock = new ReentrantLock();
-	ArrayList<Condition> conditions;
+	static state[] states;
+	static final Lock lock = new ReentrantLock();
+	static ArrayList<Condition> conditions;
 	int size;
 
 
@@ -31,16 +31,13 @@ public class Monitor
 	 */
 	public Monitor(int piNumberOfPhilosophers)
 	{
-		this.size = piNumberOfPhilosophers;
-		this.states = new state[piNumberOfPhilosophers];
-		for(int i = 0; i < this.states.length; i++) {
-			this.states[i] = state.THINKING;
-		}
-		this.conditions = new ArrayList<Condition>();
+		size = piNumberOfPhilosophers;
+		states = new state[piNumberOfPhilosophers];
+        Arrays.fill(states, state.THINKING);
+		conditions = new ArrayList<Condition>();
 		for(int i = 0; i < piNumberOfPhilosophers; i++) {
-			this.conditions.add(lock.newCondition());
+			conditions.add(lock.newCondition());
 		}
-
 	}
 
 	/*
@@ -58,12 +55,12 @@ public class Monitor
 		lock.lock();
 
 		try {
-			this.states[piTID] = state.HUNGRY;
+			states[piTID] = state.HUNGRY;
 			test(piTID);
 			if (states[piTID] != state.EATING)
-				this.conditions.get(piTID).await();
+				conditions.get(piTID).await();
 		}
-		catch (InterruptedException e) { }
+		catch (InterruptedException ignored) { }
 		finally {
 			lock.unlock();
 		}
@@ -75,19 +72,19 @@ public class Monitor
 	 */
 	public synchronized void putDown(final int piTID)
 	{
-		this.states[piTID] = state.THINKING;
+		states[piTID] = state.THINKING;
 		test((piTID + this.size - 1) % this.size);
 		test((piTID + 1) % this.size);
 	}
 
 	public synchronized void test(final int piTID)
 	{
-		if(this.states[(piTID + this.size - 1) % this.size] != state.EATING &&
-			this.states[piTID] == state.HUNGRY &&
-			this.states[(piTID + 1) % this.size] != state.EATING)
+		if(states[(piTID + this.size - 1) % this.size] != state.EATING &&
+			states[piTID] == state.HUNGRY &&
+			states[(piTID + 1) % this.size] != state.EATING)
 		{
-			this.states[piTID] = state.EATING;
-			this.conditions.get(piTID).signal();
+			states[piTID] = state.EATING;
+			conditions.get(piTID).signal();
 		}
 	}
 

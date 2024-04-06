@@ -1,6 +1,4 @@
 import common.BaseThread;
-import java.io.ObjectInputStream;
-import java.util.*;
 
 /**
  * Class Philosopher.

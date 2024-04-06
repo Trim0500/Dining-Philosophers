@@ -63,6 +63,8 @@ public class DiningPhilosophers
 			// Make the monitor aware of how many philosophers there are
 			soMonitor = new Monitor(iPhilosophers);
 
+			System.out.println(iPhilosophers + " philosopher(s) came in for a dinner.");
+
 			// Space for all the philosophers
 			Philosopher aoPhilosophers[] = new Philosopher[iPhilosophers];
 
@@ -72,12 +74,6 @@ public class DiningPhilosophers
 				aoPhilosophers[j] = new Philosopher();
 				aoPhilosophers[j].start();
 			}
-
-			System.out.println
-			(
-				iPhilosophers +
-				" philosopher(s) came in for a dinner."
-			);
 
 			// Main waits for all its children to die...
 			// I mean, philosophers to finish their dinner.
