@@ -48,7 +48,7 @@ public class Monitor
 	{
 		states[piTID] = state.HUNGRY;
 		test(piTID);
-		if (states[piTID] != state.EATING)
+		while (states[piTID] != state.EATING)
 			synchronized (this) {
                 try {
                     wait();
