@@ -29,7 +29,7 @@ public class Philosopher extends BaseThread
 	{
 		try
 		{
-			System.out.printf("[Philosopher/eat] -- Philosopher %d is now eating.\n", getTID());
+			System.out.printf("[Philosopher/eat] -- Philopher %d is now eating.\n", getTID());
 
 			Thread.yield();
 
@@ -37,7 +37,7 @@ public class Philosopher extends BaseThread
 
 			Thread.yield();
 
-			System.out.printf("[Philosopher/eat] -- Philosopher %d is done eating.\n", getTID());
+			System.out.printf("[Philosopher/eat] -- Philopher %d is done eating.\n", getTID());
 		}
 		catch(InterruptedException e)
 		{
@@ -58,7 +58,7 @@ public class Philosopher extends BaseThread
 	public void think()
 	{
 		try {
-			System.out.printf("[Philosopher/think] -- Philosopher %d is now thinking.\n", getTID());
+			System.out.printf("[Philosopher/think] -- Philopher %d is now thinking.\n", getTID());
 
 			Thread.yield();
 
@@ -66,7 +66,7 @@ public class Philosopher extends BaseThread
 
 			Thread.yield();
 
-			System.out.printf("[Philosopher/think] -- Philosopher %d is done thinking.\n", getTID());
+			System.out.printf("[Philosopher/think] -- Philopher %d is done thinking.\n", getTID());
 		}
 		catch (InterruptedException exc) {
 			System.err.println("Philosopher.think():");
@@ -147,7 +147,9 @@ public class Philosopher extends BaseThread
 			"The Zombies are Coming.......",
 			"Chewbacca once said: Uuuuuuuuuuuur Ahhhhhrrrrrr Uhrrr Ahhhhrrrrrr Aaaargh...",
 			"AHHHHH FORGIVE, FORGIVENESS!!!!!",
-			"How's the Wife!?"
+			"How's the Wife!?",
+			"I can't believe Diddy Kong is dead, killed by his uncle, possibly his father.",
+			"gOt aNOthER fUeL CAn!!"
 		};
 
 		System.out.printf("Philopher %d says: %s\n", getTID(), astrPhrases[(int)(Math.random() * astrPhrases.length)]);
